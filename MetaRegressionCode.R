@@ -1,15 +1,16 @@
 # The following code was run to produce the results reported in the manuscript 
-# entitled "Normal Eye Growth Rate from 6 to 24 Years Old: A Meta-Regression 
-# Involving 4402 Emmetropic Eyes" 
+# entitled "Normal eye growth from 6 to 24 years old: 
+# a meta-regression of 28 studies including 4402 emmetropic eyes".
 
 # Author: Fabian SL Yii
 # Email: fabian.yii@ed.ac.uk
 
 # For the purpose of open access, the author has applied a creative commons 
 # attribution (CC BY) licence to any Author Accepted Manuscript version 
-# arising from this submission. 
+# arising from this work. 
 ################################################################################
 rm(list=ls())
+# # Uncomment the following if running for the first time
 # install.packages('meta')
 # install.packages('metafor')
 # install.packages('ggplot2')
@@ -17,6 +18,10 @@ rm(list=ls())
 # install.packages('viridis')
 # install.packages('ggrepel')
 # install.packages('lmtest')
+# install.packages('nlraa')
+# install.packages('ggthemes')
+# install.packages('extrafont')
+# install.packages('remotes')
 library('meta')
 library('metafor')
 library('ggplot2')
@@ -25,9 +30,15 @@ library('viridis')
 library('ggrepel')
 library('nlme')
 library('lmtest')
+library('nlraa')
+library('ggthemes')
+library('extrafont')
+library('remotes')
+# remotes::install_version("Rttf2pt1", version = "1.3.8")
+# extrafont::font_import()
 ################################################################################
 # Read data into workspace
-d <- read.csv('/Users/fabianyii/Desktop/cleaned_data.csv')
+d <- read.csv('/Users/fabianyii/Desktop/AlRateEmmetropes/data/cleaned_data.csv')
 d$quality <- as.factor(d$quality)
 d$dataset <- as.factor(d$dataset) 
 d$emm_code <- as.factor(d$emm_code) 
@@ -52,7 +63,7 @@ d$weight = 1/(norm(d$age_se) + norm(d$AL_se) + 0.2)
 d$label=""
 d[d$weight>1.5,]$label = d[d$weight>1.5,]$location
 d[d$weight>1.5,]$label <- c('SE Norway', 'Sydney', 'Sydney', 'Anyang', 'Anyang', 
-                            'SH', 'HK', 'HK', 'Beijing (BJ)', 'BJ', 'BJ',
+                            'SH', 'HK', 'HK', 'BJ', 'BJ', 'BJ',
                             'BJ', 'BJ', 'BJ', 'Spain', 'Anyang', 'SG', 'UK: NI')
 
 # Nonlinear model selection: fitting AL growth curve using different weighted mixed-effects models #
@@ -70,7 +81,7 @@ summary(m_allmix1)
 intervals(m_allmix1, which='fixed') # 95% CI: parameter estimates
 
 # EA and non-EA nonlinear models #
-# refit the best model (originally fitted to the full dataset) with "east_asia" as grouping variable 
+# refit the best model (originally fitted to the full dataset) with "east_asia" as a grouping variable 
 ages <- seq(6,24,0.5)
 dgrouped <- groupedData(AL_mean ~ age_mean | east_asia, data = d[,c(2,10,12,21,24)])
 dgrouped$east_asia <- factor(dgrouped$east_asia, ordered=FALSE)
@@ -82,6 +93,26 @@ refit_allmix1 <- update(m_allmix1, fixed = a + b + c ~ east_asia,
 summary(refit_allmix1) 
 intervals(refit_allmix1, which='fixed') # 95% CI for each parameter estimate 
 anova.lme(refit_allmix1, type='marginal') # Wald test of parameter differences (marginal sums of squares)
+
+# Refit the best model with "east_asia" as a grouping variable on one parameter at a time
+refit_allmix_a <- update(m_allmix1, fixed = list(a~1, b~east_asia, c~east_asia),
+                        start = c(fxf[1],
+                                  fxf[2], 0,
+                                  fxf[3], 0))
+refit_allmix_b <- update(m_allmix1, fixed = list(a~east_asia, b~1, c~east_asia),
+                         start = c(fxf[1], 0,
+                                   fxf[2],
+                                   fxf[3], 0))
+refit_allmix_c <- update(m_allmix1, fixed = list(a~east_asia, b~east_asia, c~1),
+                         start = c(fxf[1], 0,
+                                   fxf[2], 0,
+                                   fxf[3]))
+# Compare models fitted without and with the grouping variable 
+# on a specific parameter using likelihood-ratioo test
+lrtest(refit_allmix_a, refit_allmix1)
+lrtest(refit_allmix_b, refit_allmix1)
+lrtest(refit_allmix_c, refit_allmix1)
+
 
 set.seed(22)
 # Predict age-specific AL values and their 95% CIs using the full model 
@@ -177,7 +208,7 @@ ggobject(d) + scale_y_continuous(labels=seq(22.8,23.9,0.1), breaks=seq(22.8,23.9
                                          21.99 + frac(1, epsilon^scriptstyle(-0.03%*%age)),
                                          23.45 - frac(515.51, epsilon^scriptstyle(age)),
                                          24.03 + frac(-7.55, age) ))
-ggsave('/Users/fabianyii/Desktop/AlRateEmmetropes/plots/modelSelectFullDataset.png', width=7, height=6)
+ggsave('/Users/fabianyii/Desktop/AlRateEmmetropes/plots/modelSelectFullDataset.pdf', width=160, height=160, units='mm')
 
 # PLOT 2: Nonlinear AL growth curve fitted tot he full dataset
 ggobject(d) + 
@@ -194,9 +225,9 @@ ggobject(d) +
     max.overlaps = Inf,
     arrow = arrow(length = unit(0.01, "npc")),
     nudge_x = ifelse(d$age_mean>6.7 & d$age_mean<9.5, 0.05, 0.9),
-    nudge_y = ifelse(d$age_mean>6.7 & d$age_mean<9.5, 0.175, -0.12),
+    nudge_y = ifelse(d$age_mean>6.7 & d$age_mean<9.5, 0.175, -0.15),
     color = "grey50")
-ggsave('/Users/fabianyii/Desktop/AlRateEmmetropes/plots/NlsFullDataset.png', width=7.5, height=6)
+ggsave('/Users/fabianyii/Desktop/AlRateEmmetropes/plots/NlsFullDataset.pdf', width=170, height=165, units='mm')
 
 # PLOT 3: Nonlinear EA and non-EA AL growth curves (linear ineraction shown as inset)
 main_plot <- ggobject(d, ylimits=c(22.4, 23.9)) + 
@@ -225,7 +256,7 @@ main_plot + geom_vline(xintercept=12, lty='dashed', color='lightgray') +
                                  scale_y_continuous(labels=seq(22.4,23.8, 0.2), breaks=seq(22.4,23.8, 0.2), lim=c(22.4, 23.8)) +
                                  scale_x_continuous(labels=seq(6,12,2), breaks=seq(6,12,2), lim=c(6,12)) ), 
                     xmin=13.5, xmax=24, ymin=22.4, ymax=23.2) +  theme(legend.position=c(0.2,0.8))
-ggsave('/Users/fabianyii/Desktop/AlRateEmmetropes/plots/EaVsNonEa.png', width=7.5, height=6)
+ggsave('/Users/fabianyii/Desktop/AlRateEmmetropes/plots/EaVsNonEa.pdf', width=160, height=150, units='mm')
 
 ###################################################################################
 ################################### DISCUSSION ####################################
@@ -251,26 +282,22 @@ data <- data.frame('age'=ages, 'OurAlRate'=OurAlRate, 'UsAlRate'=usal_rate, 'SgA
 data$sg_extrapolate <- 'no'; data$sg_extrapolate[which(data$age>12)] <- 'yes'
 data$us_extrapolate <- 'no'; data$us_extrapolate[which(data$age>14)] <- 'yes'
 ggplot(data) + 
-  geom_line(aes(x=age, y=OurAlRate, color='This work'), size=1.5) +
-  geom_line(aes(x=age, y=SgAlRate, color='Wong et al.', linetype=sg_extrapolate), size=1.5) +
-  geom_line(aes(x=age, y=UsAlRate,color='Zadnik et al.', linetype=us_extrapolate), size=1.5) +
+  geom_line(aes(x=age, y=OurAlRate, color='This work'), size=1) +
+  geom_line(aes(x=age, y=SgAlRate, color='Wong et al.', linetype=sg_extrapolate), size=1) +
+  geom_line(aes(x=age, y=UsAlRate,color='Zadnik et al.', linetype=us_extrapolate), size=1) +
   scale_color_manual(name=' ',
                      values=c('This work'='darkblue', 'Wong et al.'='maroon', 'Zadnik et al.'='darkgreen')) +
   theme(legend.position=c(0.6,0.8),
         legend.background=element_blank(),
         panel.grid.minor.x=element_blank(),
         panel.grid.minor.y=element_blank()) +
-  guides(color=guide_legend(keywidth=2.5, keyheight=2)) +
+  guides(color=guide_legend(keywidth=1.8, keyheight=1.2)) +
   scale_x_continuous(labels=seq(6,24,2), breaks=seq(6,24,2), lim=c(6,24)) +
   scale_y_continuous(labels=seq(0,0.24,0.04), breaks=seq(0,0.24,0.04), lim=c(0,0.241)) +
   xlab("Age (year)") + 
   ylab("AL Growth Rate (mm/y)") +
   scale_linetype(guide='none')
-ggsave('/Users/fabianyii/Desktop/AlRateEmmetropes/plots/ThisWorkVsOthers.png', width=5, height=5)
-
-
-
-
+ggsave('/Users/fabianyii/Desktop/AlRateEmmetropes/plots/ThisWorkVsOthers.pdf', width=85, height=100, units='mm')
 
 
 
