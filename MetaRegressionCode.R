@@ -172,7 +172,7 @@ ggobject <- function(data, ylimits=c(22.5, 23.9)){
     ylab("AL (mm)") + 
     scale_size(range = c(0.1, 15), name="Weight", guide='none') +
     scale_fill_manual(name='East Asia', labels=c('No', 'Yes'), values=c('maroon', 'darkblue')) +
-    theme_ipsum() + 
+    # theme_ipsum() + 
     theme(legend.position=c(1, 0.1), 
           legend.justification = c(1, 0.1),
           legend.background=element_blank(), 
@@ -207,7 +207,7 @@ ggobject(d) + scale_y_continuous(labels=seq(22.8,23.9,0.1), breaks=seq(22.8,23.9
                      labels = expression(23.6 - frac(5.60, epsilon^scriptstyle(0.3%*%age)),
                                          21.99 + frac(1, epsilon^scriptstyle(-0.03%*%age)),
                                          23.45 - frac(515.51, epsilon^scriptstyle(age)),
-                                         24.03 + frac(-7.55, age) ))
+                                         24.03 - frac(7.55, age) ))
 ggsave('/Users/fabianyii/Desktop/AlRateEmmetropes/plots/modelSelectFullDataset.pdf', width=160, height=160, units='mm')
 
 # PLOT 2: Nonlinear AL growth curve fitted tot he full dataset
