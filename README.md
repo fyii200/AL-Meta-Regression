@@ -1,5 +1,6 @@
-# Meta-regression of 28 studies including 4402 emmetropic eyes
-Code (MetaRegressionCode.R) used to generate emmetrope-specific AL growth curves (from 6 to 24 years old) for East-asian (EA) and non-EA populations (and combined) 
+## Emmetropic axial length (AL) growth curve: A meta-regression of 28 studies
+**MetaRegressionCodeTruncated.R:** R code used to generate combined and ethnic-specific AL growth curves in emmetropes aged 6 to 24 years.
+**cleaned_data.csv:** Extracted emmetrope-specific data from 28 primary studies
 
 
 
