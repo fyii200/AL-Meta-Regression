@@ -26,11 +26,11 @@ R code (runs on ***cleaned_data.csv***) used to generate ethnic-specific and com
 | **age_sd** | Numeric | Standard deviation of sample age (specific to emmetropes)   |
 | **biometer** | Character | Optical biometry: IOLMaster or Lenstar |
 | **cyclo** | Boolean (y/n) | If "y", cycloplegic refraction was performed; if "n" non-cycloplegic refraction was performed.   |
-| **ser_mean** | Numeric | Mean spherical equivalent refraction (specific to emmetropes, if provided).  |
-| **ser_sd** | Numeric | Standard deviation of spherical equivalent refraction (specific to emmetropes, if provided).   |
-| **emm_def** | Numeric (range) |  |
-| **emm_code** | Integer |  |
-| **quality** | Integer |  |
+| **ser_mean** | Numeric | Mean spherical equivalent refraction, SER (specific to emmetropes, if provided).  |
+| **ser_sd** | Numeric | Standard deviation of spherical equivalent refraction, SER (specific to emmetropes, if provided).   |
+| **emm_def** | Numeric (range) | Definition of emmetropia: ±0.50D SER; -0.25D to +0.50D SER; -0.25D to +0.75D SER; -0.25D to +1.25D SER; -0.50D to +0.75D SER; -0.50D to +1.00D SER; -0.50D to +1.25D; ±0.50D spherical power. |
+| **emm_code** | Integer | 1 to 8 where each number corresponds to each definition of emmetropia (**emm_def**) following the order specified above. |
+
 
 
 
