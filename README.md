@@ -7,7 +7,7 @@ R code (runs on ***cleaned_data.csv***) used to generate ethnic-specific and com
 
 ### 2) ***cleaned_data.csv***:
 
-*Cleaned dataset in CSV format comprising 20 columns and 43 rows. Each row corresponds to a specific datapoint. The codebook below summarises the content of the dataset.*
+*Cleaned dataset in CSV format comprising 19 columns and 43 rows. Each row corresponds to a specific datapoint. The codebook below summarises the content of the dataset.*
 
 | Column name | Data type | What it represents |
 | :---:   | :---: | :---: |
