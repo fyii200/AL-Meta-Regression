@@ -2,10 +2,10 @@
  
 **cleaned_data.csv:** Extracted emmetrope-specific data from 28 primary studies
 
-### 1) ***MetaRegressionCodeTruncated.R***:
+#### 1) ***MetaRegressionCodeTruncated.R***:
 R code (runs on ***cleaned_data.csv***) used to generate ethnic-specific and combined AL growth curves (Mean AL vs Mean age) in emmetropes aged 6 to 24 years.
 
-### 2) ***cleaned_data.csv***:
+#### 2) ***cleaned_data.csv***:
 
 *Cleaned dataset in CSV format comprising 19 columns and 43 rows. Each row corresponds to a specific datapoint. The codebook below summarises the content of the dataset.*
 
@@ -31,8 +31,12 @@ R code (runs on ***cleaned_data.csv***) used to generate ethnic-specific and com
 | **emm_def** | Numeric (range) | Definition of emmetropia: ±0.50D SER; -0.25D to +0.50D SER; -0.25D to +0.75D SER; -0.25D to +1.25D SER; -0.50D to +0.75D SER; -0.50D to +1.00D SER; -0.50D to +1.25D; ±0.50D spherical power. |
 | **emm_code** | Integer | 1 to 8 where each number corresponds to each definition of emmetropia (**emm_def**) following the order specified above. |
 
+## How to cite
+```
 
+Yii, FSL. Emmetropic eye growth in East Asians and non-East Asians. Ophthalmic Physiol Opt. 2023; 00: 1–7. https://doi.org/10.1111/opo.13195
 
+```
 
 
 
