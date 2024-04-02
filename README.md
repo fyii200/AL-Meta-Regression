@@ -34,7 +34,7 @@ R code (runs on ***cleaned_data.csv***) used to generate ethnic-specific and com
 ## How to cite
 ```
 
-Yii, FSL. Emmetropic eye growth in East Asians and non-East Asians. Ophthalmic Physiol Opt. 2023; 00: 1–7. https://doi.org/10.1111/opo.13195
+Yii, F. Emmetropic eye growth in East Asians and non-East Asians. Ophthalmic Physiol Opt. 2023; 00: 1–7. https://doi.org/10.1111/opo.13195
 
 ```
 
